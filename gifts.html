@@ -164,8 +164,8 @@
     </div>
 </div>
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbw0KDXCppqLkJrXCr-GfGrnYLEByYCaimV16oylaBs1uFIMrbJdAXxapaOORoDflKQ_/exec';
-    const googleFormURL = 'https://docs.google.com/forms/d/e/1FAIpQLSfNnH0iVDCavVRbPoptyakgaE54nMkk9KIS45VcP1btPnMfLg/viewform?usp=sharing; // Thêm URL Google Form
+    const scriptURL = 'YOUR_APPS_SCRIPT_URL';
+    const googleFormURL = 'YOUR_GOOGLE_FORM_URL'; // Thêm URL Google Form
     document.addEventListener('DOMContentLoaded', () => {
         const giftGrid = document.querySelector('.gift-grid');
         const numberOfGifts = 120;
@@ -249,7 +249,11 @@
                     const selectedGiftIndex = giftIndices[i]; // Lưu lại chỉ số quà đã chọn
                     if (!chosenGifts.includes(selectedGiftIndex)) {
                         // Tạo thông báo
-                        const message = `Chúc mừng ${name} đã chọn phần quà số ${selectedGiftIndex}. Dịch vụ vận chuyển đến từ ITMO's GIRLS sẽ chuyển đến anh em tại địa chỉ ${address} trong thời gian sớm nhất. Chúc anh em 23/2 vui vẻ, hạnh phúc!`;
+                        const message = `Chúc mừng ${name} đã chọn phần quà số ${selectedGiftIndex}.
+                        Dịch vụ vận chuyển đến từ ITMO's GIRLS sẽ chuyển đến anh em tại địa chỉ ${address} trong thời gian sớm nhất.
+                        Chúc anh em 23/2 vui vẻ, hạnh phúc!
+                        Hãy xác nhận đơn hàng và khám phá bí mật mới bằng nút trái tim dưới dây!`;
+
                         giftMessage.textContent = message;
                         modal.style.display = "block";
 
