@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạp Hóa ITMO - Đăng Nhập</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: url('images/background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.8); /* Thêm độ trong suốt */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 400px;
+        }
+
+        .login-container h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #e44d26; /* Màu chủ đạo của ITMO */
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            text-align: left;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        .login-button {
+            background-color: #e44d26;
+            color: white;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-button:hover {
+            background-color: #d4401a;
+        }
+
+        /* Thêm hiệu ứng lung linh */
+        @keyframes sparkle {
+            0% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+            100% { opacity: 0.5; transform: scale(1); }
+        }
+
+        .login-container h1 {
+            animation: sparkle 3s infinite;
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <h1>Chào mừng đến với Tạp Hóa ITMO</h1>
+    <form id="loginForm" action="gifts.html">
+        <div class="form-group">
+            <label for="name">Họ và tên:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="address">Địa chỉ nhận quà:</label>
+            <input type="text" id="address" name="address" required>
+        </div>
+        <button type="submit" class="login-button">Tiếp tục</button>
+    </form>
+</div>
+<script>
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        const name = document.getElementById('name').value;
+        const address = document.getElementById('address').value;
+        localStorage.setItem('name', name);
+        localStorage.setItem('address', address);
+    });
+</script>
+</body>
+</html>

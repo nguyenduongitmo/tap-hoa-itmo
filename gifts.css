@@ -1,0 +1,49 @@
+/* CSS riêng cho trang chọn quà */
+
+.gift-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Điều chỉnh kích thước cột linh hoạt */
+    gap: 10px;
+    padding: 10px;
+}
+
+.gift-item {
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-repeat: no-repeat; /* Đảm bảo background không lặp lại */
+    overflow: hidden; /* Đảm bảo không có phần nào của ảnh tràn ra ngoài */
+    position: relative; /* Cần thiết cho việc định vị tuyệt đối */
+    opacity: 0; /* Thêm thuộc tính để làm mờ ban đầu */
+    animation: slideIn 0.5s ease-out forwards;
+    width: 100px;
+    height: 100px;
+
+}
+
+.gift-item:hover {
+    transform: scale(1.1); /* Phóng to khi hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Thêm hiệu ứng cho các món quà */
+.gift-item {
+    animation: slideIn 0.5s ease-out forwards;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(-50px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* Đảm bảo hiệu ứng slideIn áp dụng tuần tự */
+.gift-item:nth-child(odd) {
+    animation-delay: 0.1s;
+}
+
+.gift-item:nth-child(even) {
+    animation-delay: 0.2s;
+}
