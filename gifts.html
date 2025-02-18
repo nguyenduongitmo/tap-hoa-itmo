@@ -155,7 +155,7 @@
     </div>
 </div>
 <script>
-    const scriptURL = 'https://script.google.com/u/0/home/projects/1y5PN0dLjlOJmzybAX0PrIr-bEXk6p7XsvEyaus4R08W99ez2udt_rKnO/edit'; // Thay thế bằng URL của Google Apps Script của bạn
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbw0KDXCppqLkJrXCr-GfGrnYLEByYCaimV16oylaBs1uFIMrbJdAXxapaOORoDflKQ_/exec'; 
 
     document.addEventListener('DOMContentLoaded', () => {
         const giftGrid = document.querySelector('.gift-grid');
@@ -167,6 +167,21 @@
         // Lấy thông tin từ localStorage
         const name = localStorage.getItem('name');
         const address = localStorage.getItem('address');
+
+        // Tạo một mảng chứa các số từ 1 đến numberOfGifts
+        const giftIndices = Array.from({ length: numberOfGifts }, (_, i) => i + 1);
+
+        // Hàm xáo trộn mảng (Fisher-Yates shuffle)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Xáo trộn mảng giftIndices
+        shuffleArray(giftIndices);
+
         // Hàm để lấy danh sách các món quà đã chọn từ Google Sheet
         async function getChosenGifts() {
             try {
@@ -178,6 +193,7 @@
                 return [];
             }
         }
+
         // Hàm để thêm một món quà đã chọn vào Google Sheet
         async function addChosenGift(giftIndex, name, address) {
             try {
@@ -198,27 +214,31 @@
                 console.error('Lỗi khi thêm quà vào Google Sheet:', error);
             }
         }
+
         // Hàm để tải và hiển thị các món quà
         async function loadGifts() {
             const chosenGifts = await getChosenGifts();
             for (let i = 0; i < numberOfGifts; i++) {
                 const giftItem = document.createElement('div');
                 giftItem.classList.add('gift-item');
+
                 const img = document.createElement('img');
                 img.src = "gift.jpg";
-                img.alt = `Món quà số ${i + 1}`;
+                img.alt = `Món quà số ${giftIndices[i]}`; // Sử dụng giftIndices[i]
                 giftItem.appendChild(img);
-                if (chosenGifts.includes(i + 1)) {
+
+                if (chosenGifts.includes(giftIndices[i])) { // Sử dụng giftIndices[i]
                     img.src = "open-gift.jpg";
                     img.alt = "Món quà đã được mở";
                     giftItem.classList.add('chosen');
                     giftItem.style.cursor = 'default';
                     giftItem.style.pointerEvents = 'none';
                 }
+
                 giftItem.addEventListener('click', async () => {
-                    if (!chosenGifts.includes(i + 1)) {
+                    if (!chosenGifts.includes(giftIndices[i])) { // Sử dụng giftIndices[i]
                         // Tự động điền thông tin và thêm vào Google Sheet
-                        await addChosenGift(i + 1, name, address);
+                        await addChosenGift(giftIndices[i], name, address); // Sử dụng giftIndices[i]
 
                         // Cập nhật giao diện người dùng sau khi đã thêm quà
                         img.src = "open-gift.jpg";
@@ -227,21 +247,25 @@
                         giftItem.style.cursor = 'default';
                         giftItem.style.pointerEvents = 'none';
 
-                        giftMessage.textContent = `Chúc mừng! Bạn đã chọn món quà số ${i + 1}.`;
+                        giftMessage.textContent = `Chúc mừng! Bạn đã chọn món quà số ${giftIndices[i]}`; // Sử dụng giftIndices[i]
                         modal.style.display = "block";
                     } else {
                         alert('Món quà này đã được chọn rồi!');
                     }
                 });
+
                 giftGrid.appendChild(giftItem);
             }
         }
+
         // Tải danh sách quà khi trang web tải
         loadGifts();
+
         // Đóng modal khi nhấp vào nút đóng
         closeButton.addEventListener('click', () => {
             modal.style.display = "none";
         });
+
         // Đóng modal khi nhấp ra ngoài modal
         window.addEventListener('click', (event) => {
             if (event.target == modal) {
