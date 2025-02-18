@@ -155,8 +155,8 @@
     </div>
 </div>
 <script>
-    const spreadsheetId = 'YOUR_SPREADSHEET_ID'; // Thay thế bằng ID của Google Sheet của bạn
-    const apiKey = 'YOUR_API_KEY'; // Thay thế bằng API key của bạn
+    const scriptURL = 'https://script.google.com/u/0/home/projects/1y5PN0dLjlOJmzybAX0PrIr-bEXk6p7XsvEyaus4R08W99ez2udt_rKnO/edit'; // Thay thế bằng URL của Google Apps Script của bạn
+
     document.addEventListener('DOMContentLoaded', () => {
         const giftGrid = document.querySelector('.gift-grid');
         const numberOfGifts = 120;
@@ -170,13 +170,9 @@
         // Hàm để lấy danh sách các món quà đã chọn từ Google Sheet
         async function getChosenGifts() {
             try {
-                const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/ChosenGifts!A:A?key=${apiKey}`);
+                const response = await fetch(scriptURL + '?action=getChosenGifts');
                 const data = await response.json();
-                if (data.values) {
-                    return data.values.map(row => parseInt(row[0]));
-                } else {
-                    return [];
-                }
+                return data;
             } catch (error) {
                 console.error('Lỗi khi lấy danh sách quà đã chọn:', error);
                 return [];
@@ -185,17 +181,15 @@
         // Hàm để thêm một món quà đã chọn vào Google Sheet
         async function addChosenGift(giftIndex, name, address) {
             try {
-                const appendData = {
-                    values: [[giftIndex, name, address]]
-                };
-                const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/GiftSelections:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS&key=${apiKey}`, {
+                const response = await fetch(scriptURL + '?action=addChosenGift', {
                     method: 'POST',
+                    mode: 'cors',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(appendData)
+                    body: JSON.stringify({giftIndex: giftIndex, name: name, address: address})
                 });
-                if (response.status === 200) {
+                if (response.ok) {
                     console.log('Đã thêm quà vào Google Sheet thành công.');
                 } else {
                     console.error('Lỗi khi thêm quà vào Google Sheet:', response.statusText);
