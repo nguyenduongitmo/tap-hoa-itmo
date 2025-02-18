@@ -5,7 +5,7 @@ const resultDiv = document.getElementById('result');
 for (let i = 1; i <= 120; i++) {
     const giftItem = document.createElement('div');
     giftItem.classList.add('gift-item');
-    giftItem.innerHTML = `<img src="images/gift.jpg" alt="Món quà ${i}">`;
+    giftItem.innerHTML = `<img src="gift.jpg" alt="Món quà ${i}">`;
     giftItem.addEventListener('click', () => selectGift(i));
     giftsGrid.appendChild(giftItem);
 }

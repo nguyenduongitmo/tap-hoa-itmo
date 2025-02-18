@@ -149,7 +149,7 @@
     <div id="giftModal" class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
-            <img src="images/gift-collection.jpg" alt="Hình ảnh quà tặng">
+            <img src="gift-collection.jpg" alt="Hình ảnh quà tặng">
             <p id="giftMessage">Bạn đã chọn món quà này!</p>
         </div>
     </div>
@@ -205,11 +205,11 @@
                 const giftItem = document.createElement('div');
                 giftItem.classList.add('gift-item');
                 const img = document.createElement('img');
-                img.src = "images/gift.jpg";
+                img.src = "gift.jpg";
                 img.alt = `Món quà số ${i + 1}`;
                 giftItem.appendChild(img);
                 if (chosenGifts.includes(i + 1)) {
-                    img.src = "images/open-gift.jpg";
+                    img.src = "open-gift.jpg";
                     img.alt = "Món quà đã được mở";
                     giftItem.classList.add('chosen');
                     giftItem.style.cursor = 'default';
@@ -221,7 +221,7 @@
                         await addChosenGift(i + 1, name, address);
 
                         // Cập nhật giao diện người dùng sau khi đã thêm quà
-                        img.src = "images/open-gift.jpg";
+                        img.src = "open-gift.jpg";
                         img.alt = "Món quà đã được mở";
                         giftItem.classList.add('chosen');
                         giftItem.style.cursor = 'default';
