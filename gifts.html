@@ -136,6 +136,14 @@
             cursor: default; /* Thay đổi con trỏ chuột */
             pointer-events: none; /* Ngăn chặn sự kiện click */
         }
+        /* CSS cho nút hình trái tim */
+        .heart-button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 30px; /* Điều chỉnh kích thước */
+            color: red; /* Màu sắc trái tim */
+        }
     </style>
 </head>
 <body>
@@ -150,19 +158,21 @@
         <div class="modal-content">
             <span class="close-button">&times;</span>
             <img src="gift-collection.jpg" alt="Hình ảnh quà tặng">
-            <p id="giftMessage">Bạn đã chọn món quà này!</p>
+            <p id="giftMessage"></p>
+            <button id="confirmButton" class="heart-button">❤️</button>
         </div>
     </div>
 </div>
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbw0KDXCppqLkJrXCr-GfGrnYLEByYCaimV16oylaBs1uFIMrbJdAXxapaOORoDflKQ_/exec'; 
-
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbw0KDXCppqLkJrXCr-GfGrnYLEByYCaimV16oylaBs1uFIMrbJdAXxapaOORoDflKQ_/exec';
+    const googleFormURL = 'https://docs.google.com/forms/d/e/1FAIpQLSfNnH0iVDCavVRbPoptyakgaE54nMkk9KIS45VcP1btPnMfLg/viewform?usp=sharing; // Thêm URL Google Form
     document.addEventListener('DOMContentLoaded', () => {
         const giftGrid = document.querySelector('.gift-grid');
         const numberOfGifts = 120;
         const modal = document.getElementById('giftModal');
         const giftMessage = document.getElementById('giftMessage');
         const closeButton = document.querySelector('.close-button');
+        const confirmButton = document.getElementById('confirmButton'); // Lấy nút trái tim
 
         // Lấy thông tin từ localStorage
         const name = localStorage.getItem('name');
@@ -203,7 +213,7 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({giftIndex: giftIndex, name: name, address: address})
+                    body: JSON.stringify({ giftIndex: giftIndex, name: name, address: address })
                 });
                 if (response.ok) {
                     console.log('Đã thêm quà vào Google Sheet thành công.');
@@ -224,10 +234,10 @@
 
                 const img = document.createElement('img');
                 img.src = "gift.jpg";
-                img.alt = `Món quà số ${giftIndices[i]}`; // Sử dụng giftIndices[i]
+                img.alt = `Món quà số ${giftIndices[i]}`;
                 giftItem.appendChild(img);
 
-                if (chosenGifts.includes(giftIndices[i])) { // Sử dụng giftIndices[i]
+                if (chosenGifts.includes(giftIndices[i])) {
                     img.src = "open-gift.jpg";
                     img.alt = "Món quà đã được mở";
                     giftItem.classList.add('chosen');
@@ -236,19 +246,31 @@
                 }
 
                 giftItem.addEventListener('click', async () => {
-                    if (!chosenGifts.includes(giftIndices[i])) { // Sử dụng giftIndices[i]
-                        // Tự động điền thông tin và thêm vào Google Sheet
-                        await addChosenGift(giftIndices[i], name, address); // Sử dụng giftIndices[i]
-
-                        // Cập nhật giao diện người dùng sau khi đã thêm quà
-                        img.src = "open-gift.jpg";
-                        img.alt = "Món quà đã được mở";
-                        giftItem.classList.add('chosen');
-                        giftItem.style.cursor = 'default';
-                        giftItem.style.pointerEvents = 'none';
-
-                        giftMessage.textContent = `Chúc mừng! Bạn đã chọn món quà số ${giftIndices[i]}`; // Sử dụng giftIndices[i]
+                    const selectedGiftIndex = giftIndices[i]; // Lưu lại chỉ số quà đã chọn
+                    if (!chosenGifts.includes(selectedGiftIndex)) {
+                        // Tạo thông báo
+                        const message = `Chúc mừng ${name} đã chọn phần quà số ${selectedGiftIndex}. Dịch vụ vận chuyển đến từ ITMO's GIRLS sẽ chuyển đến anh em tại địa chỉ ${address} trong thời gian sớm nhất. Chúc anh em 23/2 vui vẻ, hạnh phúc!`;
+                        giftMessage.textContent = message;
                         modal.style.display = "block";
+
+                        // Gắn trình xử lý sự kiện vào nút xác nhận
+                        confirmButton.onclick = async () => {
+                            // Thêm thông tin vào Google Sheet
+                            await addChosenGift(selectedGiftIndex, name, address);
+
+                            // Cập nhật giao diện người dùng sau khi đã thêm quà
+                            img.src = "open-gift.jpg";
+                            img.alt = "Món quà đã được mở";
+                            giftItem.classList.add('chosen');
+                            giftItem.style.cursor = 'default';
+                            giftItem.style.pointerEvents = 'none';
+
+                            modal.style.display = "none";
+
+                            // Chuyển hướng đến Google Form
+                            window.location.href = googleFormURL;
+                        };
+
                     } else {
                         alert('Món quà này đã được chọn rồi!');
                     }
